@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Navbar,
   NavbarBrand,
@@ -9,7 +9,10 @@ import {
   NavbarItem,
   Link,
   Button,
-} from "@heroui/react";
+} from '@heroui/react';
+import { usePathname } from 'next/navigation';
+import ThemeSwitch from './ThemeSwitch';
+import { Stack } from '@/components/ui';
 
 const AcmeLogo = () => {
   return (
@@ -25,33 +28,36 @@ const AcmeLogo = () => {
 };
 
 const menuItems = [
-  "Profile",
-  "Dashboard",
-  "Activity",
-  "Analytics",
-  "System",
-  "Deployments",
-  "My Settings",
-  "Team Settings",
-  "Help & Feedback",
-  "Log Out",
+  {
+    title: 'Главная',
+    href: '/',
+  },
+  {
+    title: 'О нас',
+    href: '/about',
+  },
+  {
+    title: 'Вопросы и ответы',
+    href: '/faq',
+  },
 ];
 
 export default function LayoutHeader() {
+  const pathname = usePathname();
   return (
     <Navbar disableAnimation isBordered isBlurred={false}>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle />
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden pr-3" justify="center">
+      <NavbarContent className="pr-3 sm:hidden" justify="center">
         <NavbarBrand>
           <AcmeLogo />
           <p className="font-bold text-inherit">ACME</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         <NavbarBrand>
           <AcmeLogo />
           <p className="font-bold text-inherit">ACME</p>
@@ -84,19 +90,25 @@ export default function LayoutHeader() {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className="w-full"
-              color={index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"}
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+      <NavbarMenu className="h-full max-h-[calc(100%-var(--navbar-height))] pb-20">
+        <Stack className="h-full justify-between">
+          <Stack className="gap-y-3">
+            {menuItems.map((item, index) => (
+              <NavbarMenuItem key={`${item.title}-${index}`}>
+                <Link
+                  className="w-full"
+                  color={pathname === item.href ? 'warning' : 'foreground'}
+                  href={item.href}
+                  size="lg"
+                >
+                  {item.title}
+                </Link>
+              </NavbarMenuItem>
+            ))}
+          </Stack>
+
+          <ThemeSwitch />
+        </Stack>
       </NavbarMenu>
     </Navbar>
   );
