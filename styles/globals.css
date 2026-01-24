@@ -2,34 +2,30 @@
 @plugin './hero.ts';
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
+@import './components.css';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --navbar-height: 4rem;
   color-scheme: light;
+  --color-background: #f2f2f2;
+  --color-muted: #e3e3e6;
+  /* --foreground: #171717; */
+  --navbar-height: 4rem;
 }
 
 .dark {
   color-scheme: dark;
+  --color-background: #161616;
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-primary: #f5a523;
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: var(--color-background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -44,4 +40,15 @@ body {
   :root {
     --navbar-height: calc(4rem + 1px);
   }
+}
+
+* {
+  @apply [&::-webkit-scrollbar]:w-2;
+  @apply [&::-webkit-scrollbar-thumb]:rounded-full;
+
+  @apply [&::-webkit-scrollbar-track]:bg-[(--color-background)];
+  @apply [&::-webkit-scrollbar-thumb]:bg-[#c5c6c7];
+
+  @apply dark:[&::-webkit-scrollbar-thumb]:bg-[#404040];
+  @apply dark:[&::-webkit-scrollbar-track]:bg-[(--color-background)];
 }

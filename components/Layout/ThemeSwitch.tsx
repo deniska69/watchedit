@@ -1,7 +1,7 @@
 'use client';
 import { Switch } from '@heroui/react';
 import { useTheme } from 'next-themes';
-import { SVGProps } from 'react';
+import { SVGProps, useEffect, useState, useEffectEvent } from 'react';
 
 const MoonIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -40,14 +40,24 @@ const SunIcon = (props: SVGProps<SVGSVGElement>) => (
 export default function ThemeSwitch() {
   const { theme, setTheme } = useTheme();
 
+  const [mounted, setMounted] = useState(false);
+
+  const onMount = useEffectEvent(() => setMounted(true));
+
+  useEffect(() => {
+    onMount();
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <Switch
-      isSelected={theme === 'light'}
-      onValueChange={(isDark) => setTheme(!isDark ? 'dark' : 'light')}
+      size="lg"
       color="warning"
       endContent={<MoonIcon />}
-      size="lg"
       startContent={<SunIcon />}
+      isSelected={theme === 'dark'}
+      onValueChange={(isDark) => setTheme(isDark ? 'dark' : 'light')}
     />
   );
 }

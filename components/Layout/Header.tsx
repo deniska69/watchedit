@@ -60,9 +60,9 @@ const MobileHeader = () => {
       </NavbarContent>
 
       <NavbarContent className="md:hidden" justify="center">
-        <NavbarBrand className="mr-4 text-white" as={Link} href="/">
+        <NavbarBrand className="mr-4" as={Link} href="/">
           <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold">WatchedIt</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -80,9 +80,8 @@ const MobileHeader = () => {
             {menuItems.map((item, index) => (
               <NavbarMenuItem key={`${item.title}-${index}`}>
                 <Link
-                  className="w-full"
-                  color={pathname === item.href ? 'warning' : 'foreground'}
                   href={item.href}
+                  data-active={pathname === item.href ? 'true' : undefined}
                 >
                   {item.title}
                 </Link>
@@ -103,16 +102,16 @@ const DesktopHeader = () => {
   return (
     <Fragment>
       <NavbarContent className="hidden gap-4 md:flex" justify="center">
-        <NavbarBrand className="mr-4 text-white" as={Link} href="/">
+        <NavbarBrand className="mr-4" as={Link} href="/">
           <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">WatchedIt</p>
         </NavbarBrand>
 
         {menuItems.map((item, index) => (
           <NavbarItem key={`${item.title}-${index}`}>
             <Link
-              color={pathname === item.href ? 'warning' : 'foreground'}
               href={item.href}
+              data-active={pathname === item.href ? 'true' : undefined}
             >
               {item.title}
             </Link>

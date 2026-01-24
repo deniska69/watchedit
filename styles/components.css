@@ -1,0 +1,9 @@
+@layer components {
+  a {
+    @apply inline-block transition-all duration-150 hover:text-gray-600 active:scale-98 dark:hover:text-gray-400;
+  }
+
+  a[data-active='true'] {
+    @apply text-primary;
+  }
+}
