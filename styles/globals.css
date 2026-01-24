@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin './hero.ts';
 @source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:is(.dark *));
@@ -31,5 +31,15 @@ body {
 @layer utilities {
   .dev {
     border: 1px solid red;
+  }
+}
+
+:root {
+  --navbar-height: 4rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navbar-height: calc(4rem + 1px);
   }
 }
