@@ -6,6 +6,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --navbar-height: 4rem;
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -32,10 +38,6 @@ body {
   .dev {
     border: 1px solid red;
   }
-}
-
-:root {
-  --navbar-height: 4rem;
 }
 
 @media (min-width: 768px) {

@@ -7,13 +7,13 @@ import {
   NavbarMenuItem,
   NavbarContent,
   NavbarItem,
-  Link,
   Button,
 } from '@heroui/react';
 import { usePathname } from 'next/navigation';
 import ThemeSwitch from './ThemeSwitch';
 import { Stack } from '@/components/ui';
 import { Fragment } from 'react';
+import Link from 'next/link';
 
 const AcmeLogo = () => (
   <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
@@ -83,7 +83,6 @@ const MobileHeader = () => {
                   className="w-full"
                   color={pathname === item.href ? 'warning' : 'foreground'}
                   href={item.href}
-                  size="lg"
                 >
                   {item.title}
                 </Link>
@@ -114,7 +113,6 @@ const DesktopHeader = () => {
             <Link
               color={pathname === item.href ? 'warning' : 'foreground'}
               href={item.href}
-              size="lg"
             >
               {item.title}
             </Link>
@@ -123,13 +121,18 @@ const DesktopHeader = () => {
       </NavbarContent>
 
       <NavbarContent className="hidden md:flex" justify="end">
-        <NavbarItem className="hidden text-white lg:flex">
-          <Link href="#">Войти</Link>
+        <NavbarItem>
+          <Link href="#" color="foreground">
+            Войти
+          </Link>
         </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="warning" href="#" variant="flat">
             Регистрация
           </Button>
+        </NavbarItem>
+        <NavbarItem>
+          <ThemeSwitch />
         </NavbarItem>
       </NavbarContent>
     </Fragment>

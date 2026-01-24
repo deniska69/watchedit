@@ -26,7 +26,7 @@ interface ILayout {
 
 export default function Layout({ children }: ILayout) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
