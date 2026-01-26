@@ -1,0 +1,136 @@
+'use client';
+import { Div, HStack, Stack, WatchedItLogoIcon } from '@/components/ui';
+import { Button } from '@heroui/button';
+import { Divider } from '@heroui/divider';
+import { Form } from '@heroui/form';
+import { Input } from '@heroui/input';
+import { Modal, ModalBody, ModalContent } from '@heroui/modal';
+import { FormEvent, useEffect, useState } from 'react';
+
+export type TypeModeAuthModal = 'auth' | 'registration' | undefined;
+
+interface IAuthModal {
+  onClose: () => void;
+  mode: TypeModeAuthModal;
+}
+
+export default function AuthModal({ mode, onClose }: IAuthModal) {
+  const [load, setLoad] = useState(false);
+  const [type, setType] = useState<TypeModeAuthModal>(undefined);
+
+  useEffect(() => {
+    setType(mode);
+  }, [mode]);
+
+  const isAuth = type === 'auth';
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoad(true);
+
+    const data = Object.fromEntries(new FormData(e.currentTarget));
+    console.log(data);
+  };
+
+  return (
+    <Modal
+      size="full"
+      isOpen={!!type}
+      onClose={onClose}
+      hideCloseButton={false}
+    >
+      <ModalContent>
+        <ModalBody className="flex flex-col gap-0 p-0 md:grid md:grid-cols-2">
+          <Stack className="md:bg-primary/10 dark:md:bg-primary/25">
+            <HStack className="items-center p-4 md:p-8">
+              <WatchedItLogoIcon />
+              <p className="font-bold text-inherit">WatchedIt</p>
+            </HStack>
+            <Div className="hidden flex-1 items-center justify-center pb-72 md:flex">
+              <Div className="relative flex h-10 w-full max-w-md items-center justify-center">
+                <h1 className="absolute top-0.5 right-13 text-4xl text-black/40 italic">
+                  {`"Watched it? Rate it!"`}
+                </h1>
+                <h1 className="text-primary absolute text-4xl italic">
+                  {`"Watched it? Rate it!"`}
+                </h1>
+              </Div>
+            </Div>
+          </Stack>
+          <Stack className="flex-1 items-center justify-center px-12 pb-24">
+            <h1 className="text-2xl font-bold uppercase">
+              {isAuth ? 'Авторизация' : 'Регистрация'}
+            </h1>
+            <p className="text-muted text-sm">
+              Введите электронную почту и пароль
+            </p>
+
+            <Form
+              onSubmit={onSubmit}
+              className="mt-6 w-full gap-y-6 md:max-w-sm"
+            >
+              <Input
+                isRequired
+                name="email"
+                type="email"
+                isDisabled={load}
+                labelPlacement="outside"
+                label="Электронная почта"
+                placeholder="email@example.ru"
+                errorMessage="Введите корректную электронную почту"
+              />
+              <Input
+                isRequired
+                label="Пароль"
+                name="password"
+                type="password"
+                isDisabled={load}
+                placeholder="●●●●●●"
+                labelPlacement="outside"
+                autoComplete="current-password"
+                errorMessage="Пароль должен быть длинной не менее 4х символов"
+              />
+              {!isAuth ? (
+                <Input
+                  isRequired
+                  label="Подтвердите пароль"
+                  type="password"
+                  isDisabled={load}
+                  placeholder="●●●●●●"
+                  name="confirm_password"
+                  labelPlacement="outside"
+                  autoComplete="current-password"
+                  errorMessage="Пароль должен быть длинной не менее 4х символов"
+                />
+              ) : null}
+              <Button
+                type="submit"
+                color="primary"
+                isLoading={load}
+                className="w-full"
+              >
+                {isAuth ? 'Войти' : 'Зарегистрироваться'}
+              </Button>
+
+              <HStack className="w-full items-center">
+                <Divider className="flex-1" />
+                <span className="px-2 whitespace-nowrap">
+                  {isAuth ? 'Нет аккаунта?' : 'Уже есть аккаунт?'}
+                </span>
+                <Divider className="flex-1" />
+              </HStack>
+
+              <Button
+                className="w-full"
+                variant="flat"
+                onPress={() => setType(isAuth ? 'registration' : 'auth')}
+              >
+                {isAuth ? 'Зарегистрироваться' : 'Войти'}
+              </Button>
+            </Form>
+          </Stack>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
+}

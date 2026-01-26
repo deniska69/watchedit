@@ -9,6 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@heroui/button": "^2.2.29",
+    "@heroui/divider": "^2.2.21",
+    "@heroui/form": "^2.1.29",
+    "@heroui/input": "^2.4.30",
+    "@heroui/modal": "^2.2.26",
     "@heroui/navbar": "^2.2.27",
     "@heroui/react": "^2.8.7",
     "classnames": "^2.5.1",

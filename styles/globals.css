@@ -6,27 +6,27 @@
 
 :root {
   color-scheme: light;
-  --color-background: #f2f2f2;
-  --color-muted: #e3e3e6;
-  /* --foreground: #171717; */
+}
+
+@theme {
   --navbar-height: 4rem;
-}
-
-.dark {
-  color-scheme: dark;
-  --color-background: #161616;
-}
-
-@theme inline {
   --color-primary: #f5a523;
-  --color-foreground: var(--foreground);
+  --color-rootbackground: #f2f2f2;
+  --color-rootheader: #ffffff;
+  --color-muted: #b4b4b4;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+.dark {
+  color-scheme: dark;
+  --color-rootbackground: #161616;
+  --color-rootheader: #272727;
+  --color-muted: #c1c1c3;
+}
+
 body {
-  background: var(--color-background);
-  color: var(--foreground);
+  background: var(--color-rootbackground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -51,4 +51,8 @@ body {
 
   @apply dark:[&::-webkit-scrollbar-thumb]:bg-[#404040];
   @apply dark:[&::-webkit-scrollbar-track]:bg-[(--color-background)];
+}
+
+button {
+  outline: none;
 }

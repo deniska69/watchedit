@@ -11,20 +11,10 @@ import {
 } from '@heroui/react';
 import { usePathname } from 'next/navigation';
 import ThemeSwitch from './ThemeSwitch';
-import { Stack } from '@/components/ui';
-import { Fragment } from 'react';
+import { Stack, WatchedItLogoIcon } from '@/components/ui';
 import Link from 'next/link';
-
-const AcmeLogo = () => (
-  <svg fill="none" height="36" viewBox="0 0 32 32" width="36">
-    <path
-      clipRule="evenodd"
-      d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-      fill="currentColor"
-      fillRule="evenodd"
-    />
-  </svg>
-);
+import { useState } from 'react';
+import AuthModal, { TypeModeAuthModal } from '@/components/auth/AuthModal';
 
 const menuItems = [
   {
@@ -42,33 +32,55 @@ const menuItems = [
 ];
 
 export default function LayoutHeader() {
+  const [modeAuthModal, setModeAuthModal] = useState<TypeModeAuthModal>();
+
   return (
-    <Navbar disableAnimation isBordered isBlurred={false}>
-      <MobileHeader />
-      <DesktopHeader />
-    </Navbar>
+    <>
+      <Navbar
+        disableAnimation
+        isBordered
+        isBlurred={false}
+        className="bg-rootheader"
+      >
+        <MobileHeader onOpenAuth={setModeAuthModal} />
+        <DesktopHeader onOpenAuth={setModeAuthModal} />
+      </Navbar>
+      <AuthModal
+        onClose={() => setModeAuthModal(undefined)}
+        mode={modeAuthModal}
+      />
+    </>
   );
 }
 
-const MobileHeader = () => {
+interface IPropsHeader {
+  onOpenAuth: (value: Exclude<TypeModeAuthModal, undefined>) => void;
+}
+
+const MobileHeader = ({ onOpenAuth }: IPropsHeader) => {
   const pathname = usePathname();
 
   return (
-    <Fragment>
+    <>
       <NavbarContent className="md:hidden" justify="start">
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarContent className="md:hidden" justify="center">
         <NavbarBrand className="mr-4" as={Link} href="/">
-          <AcmeLogo />
+          <WatchedItLogoIcon />
           <p className="font-bold">WatchedIt</p>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="md:hidden" justify="end">
         <NavbarItem>
-          <Button as={Link} color="warning" href="#" variant="flat">
+          <Button
+            href="#"
+            variant="flat"
+            color="warning"
+            onPress={() => onOpenAuth('auth')}
+          >
             Войти
           </Button>
         </NavbarItem>
@@ -92,18 +104,18 @@ const MobileHeader = () => {
           <ThemeSwitch />
         </Stack>
       </NavbarMenu>
-    </Fragment>
+    </>
   );
 };
 
-const DesktopHeader = () => {
+const DesktopHeader = ({ onOpenAuth }: IPropsHeader) => {
   const pathname = usePathname();
 
   return (
-    <Fragment>
+    <>
       <NavbarContent className="hidden gap-4 md:flex" justify="center">
         <NavbarBrand className="mr-4" as={Link} href="/">
-          <AcmeLogo />
+          <WatchedItLogoIcon />
           <p className="font-bold text-inherit">WatchedIt</p>
         </NavbarBrand>
 
@@ -121,12 +133,16 @@ const DesktopHeader = () => {
 
       <NavbarContent className="hidden md:flex" justify="end">
         <NavbarItem>
-          <Link href="#" color="foreground">
+          <Button variant="light" onPress={() => onOpenAuth('auth')}>
             Войти
-          </Link>
+          </Button>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="warning" href="#" variant="flat">
+          <Button
+            variant="flat"
+            color="warning"
+            onPress={() => onOpenAuth('registration')}
+          >
             Регистрация
           </Button>
         </NavbarItem>
@@ -134,6 +150,6 @@ const DesktopHeader = () => {
           <ThemeSwitch />
         </NavbarItem>
       </NavbarContent>
-    </Fragment>
+    </>
   );
 };
