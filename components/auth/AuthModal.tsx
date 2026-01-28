@@ -1,10 +1,13 @@
 'use client';
+import { registration } from '@/actions/auth';
 import { Div, HStack, Stack, WatchedItLogoIcon } from '@/components/ui';
+import { getFormData } from '@/helpers';
 import { Button } from '@heroui/button';
 import { Divider } from '@heroui/divider';
 import { Form } from '@heroui/form';
 import { Input } from '@heroui/input';
 import { Modal, ModalBody, ModalContent } from '@heroui/modal';
+import { addToast } from '@heroui/toast';
 import { FormEvent, useEffect, useState } from 'react';
 
 export type TypeModeAuthModal = 'auth' | 'registration' | undefined;
@@ -14,8 +17,20 @@ interface IAuthModal {
   mode: TypeModeAuthModal;
 }
 
+type TypeFormData = {
+  email: string;
+  password: string;
+  confirm_password?: string;
+};
+
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 export default function AuthModal({ mode, onClose }: IAuthModal) {
   const [load, setLoad] = useState(false);
+  const [errors, setErrors] = useState({});
   const [type, setType] = useState<TypeModeAuthModal>(undefined);
 
   useEffect(() => {
@@ -24,12 +39,52 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
 
   const isAuth = type === 'auth';
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const isAuth = type === 'auth';
+    const { email, password, confirm_password } = getFormData<TypeFormData>(
+      e.currentTarget,
+    );
+
+    if (!isValidEmail(email)) {
+      return setErrors({ email: 'Введите корректную электронную почту' });
+    }
+
+    if (password.length < 4) {
+      return setErrors({
+        password: 'Пароль должен быть длинной не менее 4х символов',
+      });
+    }
+
+    if (!isAuth && (!confirm_password || confirm_password.length < 4)) {
+      return setErrors({
+        confirm_password: 'Пароль должен быть длинной не менее 4х символов',
+      });
+    }
+
+    if (!isAuth && password !== confirm_password) {
+      return setErrors({ confirm_password: 'Пароли должны сопадать' });
+    }
+
     setLoad(true);
 
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    console.log(data);
+    if (!isAuth && password === confirm_password) {
+      registration(email, password)
+        .then(() => {
+          addToast({ title: 'Успешная регистрациия', color: 'success' });
+          onClose();
+        })
+        .catch((error) => {
+          console.log(error?.message);
+          addToast({
+            title: 'Ошибка регистрациия',
+            description: error?.message,
+            color: 'danger',
+          });
+        })
+        .finally(() => setLoad(false));
+    }
   };
 
   return (
@@ -67,6 +122,7 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
 
             <Form
               onSubmit={onSubmit}
+              validationErrors={errors}
               className="mt-6 w-full gap-y-6 md:max-w-sm"
             >
               <Input
@@ -77,10 +133,10 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
                 labelPlacement="outside"
                 label="Электронная почта"
                 placeholder="email@example.ru"
-                errorMessage="Введите корректную электронную почту"
               />
               <Input
                 isRequired
+                minLength={4}
                 label="Пароль"
                 name="password"
                 type="password"
@@ -88,19 +144,19 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
                 placeholder="●●●●●●"
                 labelPlacement="outside"
                 autoComplete="current-password"
-                errorMessage="Пароль должен быть длинной не менее 4х символов"
               />
               {!isAuth ? (
                 <Input
                   isRequired
-                  label="Подтвердите пароль"
+                  minLength={4}
                   type="password"
                   isDisabled={load}
                   placeholder="●●●●●●"
                   name="confirm_password"
                   labelPlacement="outside"
+                  label="Подтвердите пароль"
                   autoComplete="current-password"
-                  errorMessage="Пароль должен быть длинной не менее 4х символов"
+                  // errorMessage="Пароль должен быть длинной не менее 4х символов"
                 />
               ) : null}
               <Button
