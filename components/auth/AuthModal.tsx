@@ -1,5 +1,5 @@
 'use client';
-import { registration } from '@/actions/auth';
+import { registration } from '@/actions/auth.actions';
 import { Div, HStack, Stack, WatchedItLogoIcon } from '@/components/ui';
 import { getFormData } from '@/helpers';
 import { Button } from '@heroui/button';
@@ -43,9 +43,7 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
     e.preventDefault();
 
     const isAuth = type === 'auth';
-    const { email, password, confirm_password } = getFormData<TypeFormData>(
-      e.currentTarget,
-    );
+    const { email, password, confirm_password } = getFormData<TypeFormData>(e.currentTarget);
 
     if (!isValidEmail(email)) {
       return setErrors({ email: 'Введите корректную электронную почту' });
@@ -76,7 +74,6 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
           onClose();
         })
         .catch((error) => {
-          console.log(error?.message);
           addToast({
             title: 'Ошибка регистрациия',
             description: error?.message,
@@ -88,12 +85,7 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
   };
 
   return (
-    <Modal
-      size="full"
-      isOpen={!!type}
-      onClose={onClose}
-      hideCloseButton={false}
-    >
+    <Modal size="full" isOpen={!!type} onClose={onClose} hideCloseButton={false}>
       <ModalContent>
         <ModalBody className="flex flex-col gap-0 p-0 md:grid md:grid-cols-2">
           <Stack className="md:bg-primary/10 dark:md:bg-primary/25">
@@ -103,28 +95,16 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
             </HStack>
             <Div className="hidden flex-1 items-center justify-center pb-72 md:flex">
               <Div className="relative flex h-10 w-full max-w-md items-center justify-center">
-                <h1 className="absolute top-0.5 right-13 text-4xl text-black/40 italic">
-                  {`"Watched it? Rate it!"`}
-                </h1>
-                <h1 className="text-primary absolute text-4xl italic">
-                  {`"Watched it? Rate it!"`}
-                </h1>
+                <h1 className="absolute top-0.5 right-13 text-4xl text-black/40 italic">{`"Watched it? Rate it!"`}</h1>
+                <h1 className="text-primary absolute text-4xl italic">{`"Watched it? Rate it!"`}</h1>
               </Div>
             </Div>
           </Stack>
           <Stack className="flex-1 items-center justify-center px-12 pb-24">
-            <h1 className="text-2xl font-bold uppercase">
-              {isAuth ? 'Авторизация' : 'Регистрация'}
-            </h1>
-            <p className="text-muted text-sm">
-              Введите электронную почту и пароль
-            </p>
+            <h1 className="text-2xl font-bold uppercase">{isAuth ? 'Авторизация' : 'Регистрация'}</h1>
+            <p className="text-muted text-sm">Введите электронную почту и пароль</p>
 
-            <Form
-              onSubmit={onSubmit}
-              validationErrors={errors}
-              className="mt-6 w-full gap-y-6 md:max-w-sm"
-            >
+            <Form onSubmit={onSubmit} validationErrors={errors} className="mt-6 w-full gap-y-6 md:max-w-sm">
               <Input
                 isRequired
                 name="email"
@@ -156,31 +136,19 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
                   labelPlacement="outside"
                   label="Подтвердите пароль"
                   autoComplete="current-password"
-                  // errorMessage="Пароль должен быть длинной не менее 4х символов"
                 />
               ) : null}
-              <Button
-                type="submit"
-                color="primary"
-                isLoading={load}
-                className="w-full"
-              >
+              <Button type="submit" color="primary" isLoading={load} className="w-full">
                 {isAuth ? 'Войти' : 'Зарегистрироваться'}
               </Button>
 
               <HStack className="w-full items-center">
                 <Divider className="flex-1" />
-                <span className="px-2 whitespace-nowrap">
-                  {isAuth ? 'Нет аккаунта?' : 'Уже есть аккаунт?'}
-                </span>
+                <span className="px-2 whitespace-nowrap">{isAuth ? 'Нет аккаунта?' : 'Уже есть аккаунт?'}</span>
                 <Divider className="flex-1" />
               </HStack>
 
-              <Button
-                className="w-full"
-                variant="flat"
-                onPress={() => setType(isAuth ? 'registration' : 'auth')}
-              >
+              <Button className="w-full" variant="flat" onPress={() => setType(isAuth ? 'registration' : 'auth')}>
                 {isAuth ? 'Зарегистрироваться' : 'Войти'}
               </Button>
             </Form>

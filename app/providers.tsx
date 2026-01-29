@@ -6,11 +6,7 @@ import { ToastProvider } from '@heroui/toast';
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <HeroUIProvider>
-      <NextThemesProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem={false}
-      >
+      <NextThemesProvider attribute="class" defaultTheme="light" enableSystem={false}>
         <ToastProvider />
         {children}
       </NextThemesProvider>
