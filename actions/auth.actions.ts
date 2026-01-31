@@ -1,7 +1,7 @@
 'use server';
 
 import { getError } from '@/helpers';
-import { signIn } from '@/lib/auth';
+import { signIn, signOut } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
@@ -39,5 +39,13 @@ export async function login(email: string, password: string) {
     return await signIn('credentials', { email, password, redirect: false });
   } catch (error) {
     throw getError(error || 'Ошибка авторизации');
+  }
+}
+
+export async function logout() {
+  try {
+    return await signOut({ redirect: false });
+  } catch (error) {
+    throw getError(error || 'Ошибка выхода');
   }
 }

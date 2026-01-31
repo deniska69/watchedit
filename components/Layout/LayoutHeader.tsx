@@ -11,13 +11,12 @@ import {
 } from '@heroui/react';
 import { usePathname } from 'next/navigation';
 import ThemeSwitch from './ThemeSwitch';
-import { Stack, WatchedItLogoIcon } from '@/components/ui';
+import { Div, Stack, WatchedItLogoIcon } from '@/components/ui';
 import Link from 'next/link';
 import { useState } from 'react';
 import AuthModal, { TypeModeAuthModal } from '@/components/auth/AuthModal';
 import { useSession } from 'next-auth/react';
-import { Avatar } from '@heroui/avatar';
-import { DefaultSession } from 'next-auth';
+import WidgetAccountmenu from '@/components/layout/WidgetAccountmenu';
 
 const menuItems = [
   {
@@ -35,7 +34,7 @@ const menuItems = [
 ];
 
 export default function LayoutHeader() {
-  const { data, status } = useSession();
+  const { status } = useSession();
   const [modeAuthModal, setModeAuthModal] = useState<TypeModeAuthModal>();
 
   const isAuth = status === 'authenticated';
@@ -43,8 +42,8 @@ export default function LayoutHeader() {
   return (
     <>
       <Navbar disableAnimation isBordered isBlurred={false} className="bg-rootheader">
-        <MobileHeader isAuth={isAuth} user={data?.user} onOpenAuth={setModeAuthModal} />
-        <DesktopHeader isAuth={isAuth} user={data?.user} onOpenAuth={setModeAuthModal} />
+        <MobileHeader isAuth={isAuth} onOpenAuth={setModeAuthModal} />
+        <DesktopHeader isAuth={isAuth} onOpenAuth={setModeAuthModal} />
       </Navbar>
       <AuthModal onClose={() => setModeAuthModal(undefined)} mode={modeAuthModal} />
     </>
@@ -53,11 +52,10 @@ export default function LayoutHeader() {
 
 interface IPropsHeader {
   isAuth: boolean;
-  user?: DefaultSession['user'];
   onOpenAuth: (value: Exclude<TypeModeAuthModal, undefined>) => void;
 }
 
-const MobileHeader = ({ isAuth, user, onOpenAuth }: IPropsHeader) => {
+const MobileHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
   const pathname = usePathname();
 
   return (
@@ -73,11 +71,10 @@ const MobileHeader = ({ isAuth, user, onOpenAuth }: IPropsHeader) => {
         </NavbarBrand>
       </NavbarContent>
 
-      {isAuth && user ? (
-        <NavbarContent className="flex-row items-center gap-x-2 md:hidden" justify="end">
-          <Avatar size="sm" color="primary" />
-          <span className="text-primary font-bold uppercase">{user.email?.split('@')[0]}</span>
-        </NavbarContent>
+      {isAuth ? (
+        <Div className="md:hidden">
+          <WidgetAccountmenu />
+        </Div>
       ) : (
         <NavbarContent className="md:hidden" justify="end">
           <NavbarItem>
@@ -107,7 +104,7 @@ const MobileHeader = ({ isAuth, user, onOpenAuth }: IPropsHeader) => {
   );
 };
 
-const DesktopHeader = ({ isAuth, user, onOpenAuth }: IPropsHeader) => {
+const DesktopHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
   const pathname = usePathname();
 
   return (
@@ -127,11 +124,10 @@ const DesktopHeader = ({ isAuth, user, onOpenAuth }: IPropsHeader) => {
         ))}
       </NavbarContent>
 
-      {isAuth && user ? (
-        <NavbarContent className="hidden flex-row items-center gap-x-2 md:flex" justify="end">
-          <Avatar size="sm" color="primary" />
-          <span className="text-primary font-bold uppercase">{user.email}</span>
-        </NavbarContent>
+      {isAuth ? (
+        <Div className="hidden md:flex">
+          <WidgetAccountmenu />
+        </Div>
       ) : (
         <NavbarContent className="hidden md:flex" justify="end">
           <NavbarItem>
