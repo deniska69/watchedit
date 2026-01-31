@@ -1,5 +1,5 @@
 'use client';
-import { login, registration } from '@/actions/auth.actions';
+import { registration } from '@/actions/auth.actions';
 import { Div, HStack, Stack, WatchedItLogoIcon } from '@/components/ui';
 import { getFormData } from '@/helpers';
 import { Button } from '@heroui/button';
@@ -8,6 +8,7 @@ import { Form } from '@heroui/form';
 import { Input } from '@heroui/input';
 import { Modal, ModalBody, ModalContent } from '@heroui/modal';
 import { addToast } from '@heroui/toast';
+import { signIn } from 'next-auth/react';
 import { FormEvent, useEffect, useState } from 'react';
 
 export type TypeModeAuthModal = 'auth' | 'registration' | undefined;
@@ -94,8 +95,9 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
         })
         .finally(() => setLoad(false));
     } else {
-      login(email, password)
-        .then(() => {
+      signIn('credentials', { email, password, redirect: false })
+        .then((res) => {
+          if (!res?.ok) throw new Error(res?.error);
           addToast({ title: 'Успешная авторизация', color: 'success' });
           onClose();
         })

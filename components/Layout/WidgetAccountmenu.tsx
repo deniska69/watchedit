@@ -1,17 +1,19 @@
-import { logout } from '@/actions/auth.actions';
 import { HStack } from '@/components/ui';
+import { useAuthStore } from '@/store';
 import { addToast, Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarContent } from '@heroui/react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
-const WidgetAccountmenu = () => {
+const WidgetAccountMenu = () => {
   const { data } = useSession();
+  const { setAuthState } = useAuthStore();
 
   if (!data?.user) return null;
 
   const handleLogout = () => {
-    logout()
+    signOut()
       .then(() => {
         addToast({ title: 'Успешный выход', color: 'success' });
+        setAuthState('unauthenticated');
       })
       .catch((error) => {
         addToast({
@@ -43,4 +45,4 @@ const WidgetAccountmenu = () => {
   );
 };
 
-export default WidgetAccountmenu;
+export default WidgetAccountMenu;

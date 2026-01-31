@@ -15,8 +15,8 @@ import { Div, Stack, WatchedItLogoIcon } from '@/components/ui';
 import Link from 'next/link';
 import { useState } from 'react';
 import AuthModal, { TypeModeAuthModal } from '@/components/auth/AuthModal';
-import { useSession } from 'next-auth/react';
-import WidgetAccountmenu from '@/components/layout/WidgetAccountmenu';
+import { useAuthStore } from '@/store';
+import WidgetAccountMenu from '@/components/layout/WidgetAccountMenu';
 
 const menuItems = [
   {
@@ -34,16 +34,13 @@ const menuItems = [
 ];
 
 export default function LayoutHeader() {
-  const { status } = useSession();
   const [modeAuthModal, setModeAuthModal] = useState<TypeModeAuthModal>();
-
-  const isAuth = status === 'authenticated';
 
   return (
     <>
       <Navbar disableAnimation isBordered isBlurred={false} className="bg-rootheader">
-        <MobileHeader isAuth={isAuth} onOpenAuth={setModeAuthModal} />
-        <DesktopHeader isAuth={isAuth} onOpenAuth={setModeAuthModal} />
+        <MobileHeader onOpenAuth={setModeAuthModal} />
+        <DesktopHeader onOpenAuth={setModeAuthModal} />
       </Navbar>
       <AuthModal onClose={() => setModeAuthModal(undefined)} mode={modeAuthModal} />
     </>
@@ -51,12 +48,12 @@ export default function LayoutHeader() {
 }
 
 interface IPropsHeader {
-  isAuth: boolean;
   onOpenAuth: (value: Exclude<TypeModeAuthModal, undefined>) => void;
 }
 
-const MobileHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
+const MobileHeader = ({ onOpenAuth }: IPropsHeader) => {
   const pathname = usePathname();
+  const { isAuth, status } = useAuthStore();
 
   return (
     <>
@@ -71,9 +68,13 @@ const MobileHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
         </NavbarBrand>
       </NavbarContent>
 
-      {isAuth ? (
+      {status === 'loading' ? (
+        <NavbarContent className="md:hidden" justify="end">
+          <p>Проверка авторизации...</p>
+        </NavbarContent>
+      ) : isAuth ? (
         <Div className="md:hidden">
-          <WidgetAccountmenu />
+          <WidgetAccountMenu />
         </Div>
       ) : (
         <NavbarContent className="md:hidden" justify="end">
@@ -104,8 +105,9 @@ const MobileHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
   );
 };
 
-const DesktopHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
+const DesktopHeader = ({ onOpenAuth }: IPropsHeader) => {
   const pathname = usePathname();
+  const { isAuth, status } = useAuthStore();
 
   return (
     <>
@@ -124,9 +126,13 @@ const DesktopHeader = ({ isAuth, onOpenAuth }: IPropsHeader) => {
         ))}
       </NavbarContent>
 
-      {isAuth ? (
+      {status === 'loading' ? (
+        <NavbarContent className="hidden md:flex" justify="end">
+          <p>Проверка авторизации...</p>
+        </NavbarContent>
+      ) : isAuth ? (
         <Div className="hidden md:flex">
-          <WidgetAccountmenu />
+          <WidgetAccountMenu />
         </Div>
       ) : (
         <NavbarContent className="hidden md:flex" justify="end">

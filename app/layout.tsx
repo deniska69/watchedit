@@ -4,8 +4,7 @@ import '@/styles/globals.css';
 import LayoutHeader from '@/components/layout/LayoutHeader';
 import { Providers } from './providers';
 import { Div } from '@/components/ui';
-import { SessionProvider } from 'next-auth/react';
-import { auth } from '@/lib/auth';
+import AppLoader from '@/components/hoc/AppLoader';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,18 +26,16 @@ interface ILayout {
 }
 
 export default async function Layout({ children }: ILayout) {
-  const session = await auth();
-
   return (
     <html lang="ru" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <SessionProvider session={session}>
+          <AppLoader>
             <LayoutHeader />
             <Div className="flex min-h-[calc(100svh-var(--navbar-height))] justify-center font-sans">
               <main className="flex w-full max-w-5xl p-6 pb-0">{children}</main>
             </Div>
-          </SessionProvider>
+          </AppLoader>
         </Providers>
       </body>
     </html>
