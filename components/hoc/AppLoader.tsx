@@ -8,9 +8,6 @@ const AppLoader = ({ children }: { children: React.ReactNode }) => {
   const setAuthState = useAuthStore((s) => s.setAuthState);
 
   useEffect(() => {
-    console.log('');
-    console.log({ status });
-    console.log({ session });
     setAuthState(status, session ?? undefined);
   }, [status, session, setAuthState]);
 
