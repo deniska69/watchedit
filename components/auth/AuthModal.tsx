@@ -1,5 +1,5 @@
 'use client';
-import { registration } from '@/actions/auth.actions';
+import { login, registration } from '@/actions/auth.actions';
 import { Div, HStack, Stack, WatchedItLogoIcon } from '@/components/ui';
 import { getFormData } from '@/helpers';
 import { Button } from '@heroui/button';
@@ -55,9 +55,21 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
       });
     }
 
+    if (password.length > 32) {
+      return setErrors({
+        password: 'Пароль должен быть длинной не длине 32х символов',
+      });
+    }
+
     if (!isAuth && (!confirm_password || confirm_password.length < 4)) {
       return setErrors({
         confirm_password: 'Пароль должен быть длинной не менее 4х символов',
+      });
+    }
+
+    if (!isAuth && (!confirm_password || confirm_password.length > 32)) {
+      return setErrors({
+        confirm_password: 'Пароль должен быть длинной не менее 32х символов',
       });
     }
 
@@ -67,7 +79,7 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
 
     setLoad(true);
 
-    if (!isAuth && password === confirm_password) {
+    if (!isAuth) {
       registration(email, password)
         .then(() => {
           addToast({ title: 'Успешная регистрациия', color: 'success' });
@@ -76,6 +88,20 @@ export default function AuthModal({ mode, onClose }: IAuthModal) {
         .catch((error) => {
           addToast({
             title: 'Ошибка регистрациия',
+            description: error?.message,
+            color: 'danger',
+          });
+        })
+        .finally(() => setLoad(false));
+    } else {
+      login(email, password)
+        .then(() => {
+          addToast({ title: 'Успешная авторизация', color: 'success' });
+          onClose();
+        })
+        .catch((error) => {
+          addToast({
+            title: 'Ошибка авторизации',
             description: error?.message,
             color: 'danger',
           });

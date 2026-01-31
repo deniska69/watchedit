@@ -427,6 +427,17 @@
     "@react-aria/focus" "3.21.3"
     "@react-aria/interactions" "3.26.0"
 
+"@heroui/avatar@^2.2.25":
+  version "2.2.25"
+  resolved "https://registry.yarnpkg.com/@heroui/avatar/-/avatar-2.2.25.tgz#acd6676e6f773128e198698affa01bbae6e7d935"
+  integrity sha512-P4ExI0th+UlBzBojQ5jBff6C7QPTmkDZwBqCDM+6DMBPKSFyt6hWG7xaOi33g0X41QuArOlWpPOe6aG5iUZAyA==
+  dependencies:
+    "@heroui/react-utils" "2.1.14"
+    "@heroui/shared-utils" "2.1.12"
+    "@heroui/use-image" "2.1.14"
+    "@react-aria/focus" "3.21.3"
+    "@react-aria/interactions" "3.26.0"
+
 "@heroui/badge@2.2.18":
   version "2.2.18"
   resolved "https://registry.yarnpkg.com/@heroui/badge/-/badge-2.2.18.tgz#a95e860085ff9bbbbf29d1c9ba29fe114b3b0dad"
@@ -1255,6 +1266,14 @@
   version "2.1.13"
   resolved "https://registry.yarnpkg.com/@heroui/use-image/-/use-image-2.1.13.tgz#d5e733a0f673348597306c7d78c3b06bdd0115fa"
   integrity sha512-NLApz+xin2bKHEXr+eSrtB0lN8geKP5VOea5QGbOCiHq4DBXu4QctpRkSfCHGIQzWdBVaLPoV+5wd0lR2S2Egg==
+  dependencies:
+    "@heroui/react-utils" "2.1.14"
+    "@heroui/use-safe-layout-effect" "2.1.8"
+
+"@heroui/use-image@2.1.14":
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/@heroui/use-image/-/use-image-2.1.14.tgz#4f7a4052f3ca766a62cda1c4df6d5cd80975397e"
+  integrity sha512-eCxtKOsM1tszBKYqz8qIJwGIxEAUC7ua+6L9vK8JgG6gOC0jEPFGH7keQuPVprzRtG3DmNt90icowqEjnOHdFQ==
   dependencies:
     "@heroui/react-utils" "2.1.14"
     "@heroui/use-safe-layout-effect" "2.1.8"
