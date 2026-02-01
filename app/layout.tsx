@@ -33,7 +33,7 @@ export default async function Layout({ children }: ILayout) {
           <AppLoader>
             <LayoutHeader />
             <Div className="flex min-h-[calc(100svh-var(--navbar-height))] justify-center font-sans">
-              <main className="flex w-full max-w-5xl p-6 pb-0">{children}</main>
+              <main className="flex w-full max-w-5xl items-start p-6 pb-0">{children}</main>
             </Div>
           </AppLoader>
         </Providers>

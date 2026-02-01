@@ -15,3 +15,11 @@ export function getError(error: unknown) {
     return String(error);
   }
 }
+
+export function isNumber(value: unknown): value is number {
+  if (typeof value === 'number') return !isNaN(value);
+  if (typeof value === 'string' && value.trim() !== '') {
+    return !isNaN(Number(value));
+  }
+  return false;
+}

@@ -522,7 +522,7 @@
     "@react-types/shared" "3.32.1"
     scroll-into-view-if-needed "3.0.10"
 
-"@heroui/card@2.2.27":
+"@heroui/card@2.2.27", "@heroui/card@^2.2.27":
   version "2.2.27"
   resolved "https://registry.yarnpkg.com/@heroui/card/-/card-2.2.27.tgz#e066f5a527cf3b94d53594eb24c3a30c4ce6769f"
   integrity sha512-UP9IuKYzGCjwBaocv8eiusOi1SheV6Pn37r05N6Hrqd8DKvs2Ebgye3hGRZ3z3MKRsqFKAyhG+3tdDIjVs3J/Q==

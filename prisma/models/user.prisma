@@ -7,6 +7,7 @@ model User {
   isConfirmed Boolean @default(false) @map("is_confirmed")
   isDeleted   Boolean @default(false) @map("is_deleted")
   isBlocked   Boolean @default(false) @map("is_blocked")
+  role        EnumUserRole @default(USER)
 
   accounts Account[]
 
@@ -16,6 +17,12 @@ model User {
   blockedAt DateTime? @map("datetime_block")
   
   @@map("users")
+}
+
+enum EnumUserRole {
+  USER
+  ADMIN
+  MODERATOR
 }
 
 // post.prisma
