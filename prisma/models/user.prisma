@@ -1,0 +1,29 @@
+model User {
+  id          Int @id @default(autoincrement())
+  email       String @unique
+  password    String
+  name        String?
+  image       String?
+  isConfirmed Boolean @default(false) @map("is_confirmed")
+  isDeleted   Boolean @default(false) @map("is_deleted")
+  isBlocked   Boolean @default(false) @map("is_blocked")
+
+  accounts Account[]
+
+  createdAt DateTime @default(now()) @map("datetime_create")
+  updatedAt DateTime @updatedAt @map("datetime_update")
+  deletedAt DateTime? @map("datetime_delete")
+  blockedAt DateTime? @map("datetime_block")
+  
+  @@map("users")
+}
+
+// post.prisma
+// model Post {
+//   id       Int     @id @default(autoincrement())
+//   title    String
+//   content  String
+//   authorId Int
+//   author   User    @relation(fields: [authorId], references: [id])
+// }
+
