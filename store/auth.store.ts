@@ -1,24 +1,25 @@
+import { IAuthStore, TypeUser } from '@/types/store';
 import { create } from 'zustand';
-import { Session } from 'next-auth';
-
-type SessionStatus = 'authenticated' | 'unauthenticated' | 'loading';
-
-interface IAuthStore {
-  isAuth: boolean;
-  status: SessionStatus;
-  session?: Session;
-  setAuthState(status: SessionStatus, session?: Session): void;
-}
 
 export const useAuthStore = create<IAuthStore>((set) => ({
   isAuth: false,
   status: 'loading',
   session: undefined,
+  user: undefined,
   setAuthState(status, session) {
     set({
       isAuth: status === 'authenticated',
       status,
       session,
+      user: status === 'authenticated' ? (session?.user as TypeUser) : undefined,
+    });
+  },
+  wipe() {
+    set({
+      isAuth: false,
+      status: 'unauthenticated',
+      session: undefined,
+      user: undefined,
     });
   },
 }));
