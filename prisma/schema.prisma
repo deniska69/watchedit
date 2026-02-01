@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  email     String @unique
-  password  String
-  name      String?
-  image     String?
-  isDeleted Boolean? @map("is_deleted")
-  isBlocked Boolean? @map("is_blocked")
+  id          Int @id @default(autoincrement())
+  email       String @unique
+  password    String
+  name        String?
+  image       String?
+  isConfirmed Boolean @default(false) @map("is_confirmed")
+  isDeleted   Boolean @default(false) @map("is_deleted")
+  isBlocked   Boolean @default(false) @map("is_blocked")
 
   accounts Account[]
 
